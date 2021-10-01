@@ -1,216 +1,238 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Sign In with AXA</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
-	
-  <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Sign In with AXA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
 </head>
+
 <body>
 
-  <!--[if IE 8]>
+    <!--[if IE 8]>
   <script src="//cdnjs.cloudflare.com/ajax/libs/ie8/0.2.5/ie8.js"></script>
   <![endif]-->
 
-  <!--[if lte IE 9]>
+    <!--[if lte IE 9]>
   <script src="https://cdn.auth0.com/js/base64.js"></script>
   <script src="https://cdn.auth0.com/js/es5-shim.min.js"></script>
   <![endif]-->
-  
 
-  <script src="https://cdn.auth0.com/js/lock/11.30/lock.min.js"></script>
-  <script src="https://cdn.auth0.com/js/auth0/9.11/auth0.min.js"></script>
-  <script>
-    // Decode utf8 characters properly
-    var config = JSON.parse(decodeURIComponent(escape(window.atob('@@config@@'))));
-    config.extraParams = config.extraParams || {};
-    var connection = config.connection;
-    var prompt = config.prompt;
-    var languageDictionary = { 
-      emailInputPlaceholder: "Email Address",
-      passwordInputPlaceholder: "Password",
-      error: {
-      	login: {
-          "password_change_required": "Either it is your first time logging in or your password has expired. Please proceed to update it.",
-          "lock.invalid_email_password": "Wrong email or password"
-        },
-        forgotPassword: {
-          "enterprise_email": "Please Reset Password via PassAXA."
-        }
-      },
-      success: {
-       forgotPassword: "Please check your email for instructions to reset your password" 
-      },
-      title: "Welcome",
-      loginSubmitLabel: "Continue",
-      forgotPasswordSubmitLabel: "Continue",
-      forgotPasswordAction: "Forgot password? Or First Time Login?",
-      forgotPasswordTitle: "Forgot Your Password?",
-      forgotPasswordInstructions: "Enter your email address and we will send you instructions to reset your password."
-    };
-    var language;
-    var loginHint = config.extraParams.login_hint;
-    var colors = config.colors || {};
 
-    // Available Lock configuration options: https://auth0.com/docs/libraries/lock/v11/configuration
-    
-    var lock = new Auth0Lock(config.clientID, config.auth0Domain, {
-      auth: {
-        redirectUrl: config.callbackURL,
-        responseType: (config.internalOptions || {}).response_type ||
-          (config.callbackOnLocationHash ? 'token' : 'code'),
-        params: config.internalOptions
-      },
-      configurationBaseUrl: config.clientConfigurationBaseUrl,
-      overrides: {
-        __tenant: config.auth0Tenant,
-        __token_issuer: config.authorizationServer.issuer
-      },
-      assetsUrl:  config.assetsUrl,
-      // 'Username-Password-Authentication', 
-      // allowedConnections: ['SAML-SP-PassAXA'],
-      allowedConnections: connection ? [connection] : null,
-      rememberLastLogin: !prompt,
-      language: language,
-      languageBaseUrl: config.languageBaseUrl,
-      languageDictionary: languageDictionary,
-      theme: {
-        logo:           'https://smauth.axa.com/public/images/axa_logo_solid_rgb_web.png',
-        primaryColor:    colors.primary ? colors.primary : 'green',
-        authButtons: {
-          "SAML-SP-PassAXA": {
-            displayName: "Staff User Access",
-            primaryColor: "#EF6B57",
-            foregroundColor: "#00000",
-            icon: "http://example.com/icon.png"
-      		}
-        }
-      },
-      prefill: loginHint ? { email: loginHint, username: loginHint } : null,
-      closable: false,
-      defaultADUsernameFromEmailPrefix: false,
-      additionalSignUpFields: [{
-            name: "first_name",
-            placeholder: "Enter your first name"
-          },
-          {
-            name: "last_name",
-            placeholder: "Enter your last name"
-          }
-      ],
-      allowSignUp: false,
-      allowShowPassword: true
-    });
-    
-    var btn = document.createElement("button");
-    btn.innerHTML = "Submit";
-    btn.type = "submit";
-    btn.name = "formBtn";
-    document.body.appendChild(btn);
+    <script src="https://cdn.auth0.com/js/lock/11.30/lock.min.js"></script>
+    <script src="https://cdn.auth0.com/js/auth0/9.11/auth0.min.js"></script>
+    <script src="//code.jquery.com/jquery-3.1.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
 
-    if(colors.page_background) {
-      var css = '.auth0-lock.auth0-lock .auth0-lock-overlay { background: ' +
-                  colors.page_background +
-                ' }';
-      
-      // background image (uncomment out later)
-      //css = css + ' html { background: url(https://logos-world.net/wp-content/uploads/2020/07/AXA-Logo.png) no-repeat center center fixed; background-size: cover; }';
-      //css = css + ' .auth0-lock.auth0-lock.auth0-lock-opened .auth0-lock-overlay { opacity: none; background: none; }';
-   	
-      // Main background color
-      css = css + ' .auth0-lock.auth0-lock .auth0-lock-center { background-color: #ffffff; }';
-      css = css + ' .auth0-lock.auth0-lock.auth0-lock-opened .auth0-lock-widget { box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12) }';
+            // Decode utf8 characters properly
+            var config = JSON.parse(decodeURIComponent(escape(window.atob('@@config@@'))));
+            config.extraParams = config.extraParams || {};
+            var connection = config.connection;
+            var prompt = config.prompt;
+            var languageDictionary = {
+                emailInputPlaceholder: "Email Address",
+                passwordInputPlaceholder: "Password",
+                error: {
+                    login: {
+                        "password_change_required": "Either it is your first time logging in or your password has expired. Please proceed to update it.",
+                        "lock.invalid_email_password": "Wrong email or password"
+                    },
+                    forgotPassword: {
+                        "enterprise_email": "Please Reset Password via PassAXA."
+                    }
+                },
+                success: {
+                    forgotPassword: "Please check your email for instructions to reset your password"
+                },
+                title: "Welcome",
+                loginSubmitLabel: "Continue",
+                forgotPasswordSubmitLabel: "Continue",
+                forgotPasswordAction: "Forgot password? Or First Time Login?",
+                forgotPasswordTitle: "Forgot Your Password?",
+                forgotPasswordInstructions: "Enter your email address and we will send you instructions to reset your password."
+            };
+            var language;
+            var loginHint = config.extraParams.login_hint;
+            var colors = config.colors || {};
+            // Auth0.js
+            var params = {
+                domain: config.auth0Domain,
+                redirectUri: config.callbackURL,
+                clientID: config.clientID,
+                audience: config.internalOptions.audience,
+                responseType: config.callbackOnLocationHash ? 'token' : 'code'
+            };
+            // Available Lock configuration options: https://auth0.com/docs/libraries/lock/v11/configuration
 
-      // Main border radius
-      css = css + ' .auth0-lock.auth0-lock .auth0-lock-cred-pane { border-radius: 0px }';
-      
-      // Widget width
-      css = css + ' .auth0-lock.auth0-lock .auth0-lock-widget { width: 360px }';
-      
-      // Widget padding
-      css = css + ' .auth0-lock.auth0-lock .auth0-lock-cred-pane { padding-top: 25px; padding-bottom: 30px; padding-left: 15px; padding-right: 15px } ';
-      
-      // AXA logo
-      css = css + ' .auth0-lock.auth0-lock .auth0-lock-header-logo { height: 54px; margin-top: 35px; margin-bottom: 20px }';
-      
-      // Success/Error message positioning
-      css = css + ' .auth0-lock.auth0-lock .auth0-global-message.auth0-global-message-success, .auth0-lock.auth0-lock .auth0-global-message.auth0-global-message-error { margin-top: 10px; margin-left: 19px; margin-right: 19px }';
-      css = css + ' .auth0-lock.auth0-lock .auth0-global-message { text-transform: none; font-family: Source Sans Pro; font-size: 15px; background: none !important; margin-top: 0px !important; margin-bottom: -20px; font-weight: 500 }';
-      css = css + ' .auth0-lock.auth0-lock .auth0-global-message.auth0-global-message-error { color: red !important; }';
-      css = css + ' .auth0-lock.auth0-lock .auth0-global-message.auth0-global-message-success { color: green }'
-      
-      // Welcome login text
-      css = css + ' .auth0-lock.auth0-lock .auth0-lock-name { font-family: ulp-font,-apple-system,BlinkMacSystemFont,Roboto,Helvetica,sans-serif; margin-bottom: -13px; font-size: 23px }';
-            
-      // remove Email & Pwd icons
-      css = css + ' .auth0-lock.auth0-lock .auth0-lock-input-wrap.auth0-lock-input-wrap-with-icon  { padding-left: 0 }';
-      
-      // placeholders
-      css = css + ' .auth0-lock.auth0-lock .auth0-lock-input-wrap .auth0-lock-input { padding: 25px 16px; font-size: 16px; }';
-      
-      // input box
-      css = css + ' .auth0-lock input:focus { box-shadow: 0 0 0 1px #007bad }';
-      //css = css + ' .auth0-lock-input { border: 1px solid #cccccc !important; }';
-      //css = css + ' .auth0-lock-input.focus { border: 1px solid #007bad !important; }'; 
-      
-      // eye icon
-      css = css + ' .auth0-lock-input-show-password .auth0-lock-show-password input[type=checkbox] + label { margin-top: 6px }';
-      
-      // Login Continue button
-      let margins = 'margin: 20px; margin-top: -5px; border-radius: 3px; padding: 0px; width: auto !important';
-      css = css + ' .auth0-lock.auth0-lock .auth0-lock-submit { ' + margins + '}';
-      css = css + ' .auth0-lock.auth0-lock .auth0-lock-submit { background-color: #00008f !important; text-transform: none }';
-      css = css + ' .auth0-lock.auth0-lock .auth0-lock-submit .auth0-label-submit { color: #fff; font-size: 16px }';
-      
-      css = css + ' .auth0-lock.auth0-lock .auth0-lock-submit span svg.icon-text { display: none }';
-      
-      // Forgot password text
-      css = css + ' .auth0-lock.auth0-lock .auth0-lock-form .auth0-lock-alternative .auth0-lock-alternative-link { color: #007bad; font-weight: 700; font-family: Source Sans Pro; font-size: 14px; line-height: 1.5 }';
-       
-      // Forgot password text & margin alignment
-      css = css + ' .auth0-lock.auth0-lock .auth0-lock-form .auth0-lock-alternative { margin-top: 10px; text-align: initial }';
-      
-      // Forgot password instruction text
-      css = css + ' .auth0-lock.auth0-lock .auth0-lock-form p { color: #2d333a; font-size: 14px; margin-bottom: 20px; font-family: Source Sans Pro }';
-      
-      css = css + ' .auth0-lock.auth0-lock .auth0-lock-header-bg { background: none }';
-      css = css + ' .auth0-lock.auth0-lock.auth0-lock-opened .auth0-lock-header-bg .auth0-lock-header-bg-blur { opacity: 0 }';
-            
-      css = css + ' .auth0-lock.auth0-lock .auth0-lock-input-wrap .auth0-lock-input { font-family: Source Sans Pro }';
-      css = css + ' .auth0-lock.auth0-lock, .auth0-lock.auth0-lock * { font-family: Source Sans Pro }';
-      
-      // Back button from forgot password
-      css = css + ' .auth0-lock.auth0-lock .auth0-lock-close-button, .auth0-lock.auth0-lock .auth0-lock-back-button { width: 15px }';
-			
-      var style = document.createElement('style');
+            var lock = new Auth0Lock(config.clientID, config.auth0Domain, {
+                auth: {
+                    redirectUrl: config.callbackURL,
+                    responseType: (config.internalOptions || {}).response_type ||
+                        (config.callbackOnLocationHash ? 'token' : 'code'),
+                    params: config.internalOptions
+                },
+                configurationBaseUrl: config.clientConfigurationBaseUrl,
+                overrides: {
+                    __tenant: config.auth0Tenant,
+                    __token_issuer: config.authorizationServer.issuer
+                },
+                assetsUrl: config.assetsUrl,
+                // 'Username-Password-Authentication', 
+                // allowedConnections: ['SAML-SP-PassAXA'],
+                allowedConnections: connection ? [connection] : null,
+                rememberLastLogin: !prompt,
+                language: language,
+                languageBaseUrl: config.languageBaseUrl,
+                languageDictionary: languageDictionary,
+                theme: {
+                    logo: 'https://smauth.axa.com/public/images/axa_logo_solid_rgb_web.png',
+                    primaryColor: colors.primary ? colors.primary : 'green',
+                    authButtons: {
+                        "SAML-SP-PassAXA": {
+                            displayName: "Staff User Access",
+                            primaryColor: "#EF6B57",
+                            foregroundColor: "#00000",
+                            icon: "http://example.com/icon.png"
+                        }
+                    }
+                },
+                prefill: loginHint ? { email: loginHint, username: loginHint } : null,
+                closable: false,
+                defaultADUsernameFromEmailPrefix: false,
+                additionalSignUpFields: [{
+                    name: "first_name",
+                    placeholder: "Enter your first name"
+                },
+                {
+                    name: "last_name",
+                    placeholder: "Enter your last name"
+                }
+                ],
+                allowSignUp: false,
+                allowShowPassword: true
+            });
 
-      style.appendChild(document.createTextNode(css));
-      
-      document.body.appendChild(style);
-      
-      
-    }
-    
-    var options = {};
-    console.log(config.extraParams);
-    if (config.extraParams.error_message) {
-            var errMsg;
-            switch (config.extraParams.error_message) {
-                case 'password_change_required':
-                    errMsg = 'Your password has expired. Please proceed to update it.';
-                    break;
-                default:
-                    break;
+
+            lock.once('signin ready', function () {
+                initStaffUserButton();
+            });
+
+            function initStaffUserButton() {
+                var enterpriseButton = $('<br/><button>Staff User Access</button>');
+                enterpriseButton.appendTo('.auth0-lock-widget-container');
+                enterpriseButton.on('click', function (e) {
+                    e.preventDefault();
+                    webAuth.authorize({ connection: 'google-oauth2' });
+                });
             }
-            options.flashMessage = {
-                type: 'error',
-                text: errMsg
+            if (colors.page_background) {
+                var css = '.auth0-lock.auth0-lock .auth0-lock-overlay { background: ' +
+                    colors.page_background +
+                    ' }';
+
+                // background image (uncomment out later)
+                //css = css + ' html { background: url(https://logos-world.net/wp-content/uploads/2020/07/AXA-Logo.png) no-repeat center center fixed; background-size: cover; }';
+                //css = css + ' .auth0-lock.auth0-lock.auth0-lock-opened .auth0-lock-overlay { opacity: none; background: none; }';
+
+                // Main background color
+                css = css + ' .auth0-lock.auth0-lock .auth0-lock-center { background-color: #ffffff; }';
+                css = css + ' .auth0-lock.auth0-lock.auth0-lock-opened .auth0-lock-widget { box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12) }';
+
+                // Main border radius
+                css = css + ' .auth0-lock.auth0-lock .auth0-lock-cred-pane { border-radius: 0px }';
+
+                // Widget width
+                css = css + ' .auth0-lock.auth0-lock .auth0-lock-widget { width: 360px }';
+
+                // Widget padding
+                css = css + ' .auth0-lock.auth0-lock .auth0-lock-cred-pane { padding-top: 25px; padding-bottom: 30px; padding-left: 15px; padding-right: 15px } ';
+
+                // AXA logo
+                css = css + ' .auth0-lock.auth0-lock .auth0-lock-header-logo { height: 54px; margin-top: 35px; margin-bottom: 20px }';
+
+                // Success/Error message positioning
+                css = css + ' .auth0-lock.auth0-lock .auth0-global-message.auth0-global-message-success, .auth0-lock.auth0-lock .auth0-global-message.auth0-global-message-error { margin-top: 10px; margin-left: 19px; margin-right: 19px }';
+                css = css + ' .auth0-lock.auth0-lock .auth0-global-message { text-transform: none; font-family: Source Sans Pro; font-size: 15px; background: none !important; margin-top: 0px !important; margin-bottom: -20px; font-weight: 500 }';
+                css = css + ' .auth0-lock.auth0-lock .auth0-global-message.auth0-global-message-error { color: red !important; }';
+                css = css + ' .auth0-lock.auth0-lock .auth0-global-message.auth0-global-message-success { color: green }'
+
+                // Welcome login text
+                css = css + ' .auth0-lock.auth0-lock .auth0-lock-name { font-family: ulp-font,-apple-system,BlinkMacSystemFont,Roboto,Helvetica,sans-serif; margin-bottom: -13px; font-size: 23px }';
+
+                // remove Email & Pwd icons
+                css = css + ' .auth0-lock.auth0-lock .auth0-lock-input-wrap.auth0-lock-input-wrap-with-icon  { padding-left: 0 }';
+
+                // placeholders
+                css = css + ' .auth0-lock.auth0-lock .auth0-lock-input-wrap .auth0-lock-input { padding: 25px 16px; font-size: 16px; }';
+
+                // input box
+                css = css + ' .auth0-lock input:focus { box-shadow: 0 0 0 1px #007bad }';
+                //css = css + ' .auth0-lock-input { border: 1px solid #cccccc !important; }';
+                //css = css + ' .auth0-lock-input.focus { border: 1px solid #007bad !important; }'; 
+
+                // eye icon
+                css = css + ' .auth0-lock-input-show-password .auth0-lock-show-password input[type=checkbox] + label { margin-top: 6px }';
+
+                // Login Continue button
+                let margins = 'margin: 20px; margin-top: -5px; border-radius: 3px; padding: 0px; width: auto !important';
+                css = css + ' .auth0-lock.auth0-lock .auth0-lock-submit { ' + margins + '}';
+                css = css + ' .auth0-lock.auth0-lock .auth0-lock-submit { background-color: #00008f !important; text-transform: none }';
+                css = css + ' .auth0-lock.auth0-lock .auth0-lock-submit .auth0-label-submit { color: #fff; font-size: 16px }';
+
+                css = css + ' .auth0-lock.auth0-lock .auth0-lock-submit span svg.icon-text { display: none }';
+
+                // Forgot password text
+                css = css + ' .auth0-lock.auth0-lock .auth0-lock-form .auth0-lock-alternative .auth0-lock-alternative-link { color: #007bad; font-weight: 700; font-family: Source Sans Pro; font-size: 14px; line-height: 1.5 }';
+
+                // Forgot password text & margin alignment
+                css = css + ' .auth0-lock.auth0-lock .auth0-lock-form .auth0-lock-alternative { margin-top: 10px; text-align: initial }';
+
+                // Forgot password instruction text
+                css = css + ' .auth0-lock.auth0-lock .auth0-lock-form p { color: #2d333a; font-size: 14px; margin-bottom: 20px; font-family: Source Sans Pro }';
+
+                css = css + ' .auth0-lock.auth0-lock .auth0-lock-header-bg { background: none }';
+                css = css + ' .auth0-lock.auth0-lock.auth0-lock-opened .auth0-lock-header-bg .auth0-lock-header-bg-blur { opacity: 0 }';
+
+                css = css + ' .auth0-lock.auth0-lock .auth0-lock-input-wrap .auth0-lock-input { font-family: Source Sans Pro }';
+                css = css + ' .auth0-lock.auth0-lock, .auth0-lock.auth0-lock * { font-family: Source Sans Pro }';
+
+                // Back button from forgot password
+                css = css + ' .auth0-lock.auth0-lock .auth0-lock-close-button, .auth0-lock.auth0-lock .auth0-lock-back-button { width: 15px }';
+
+                var style = document.createElement('style');
+
+                style.appendChild(document.createTextNode(css));
+
+                document.body.appendChild(style);
+
+
             }
-    }
-    
-    lock.show(options);
-  </script>
+
+            var options = {};
+            console.log(config.extraParams);
+            if (config.extraParams.error_message) {
+                var errMsg;
+                switch (config.extraParams.error_message) {
+                    case 'password_change_required':
+                        errMsg = 'Your password has expired. Please proceed to update it.';
+                        break;
+                    default:
+                        break;
+                }
+                options.flashMessage = {
+                    type: 'error',
+                    text: errMsg
+                }
+            }
+
+            lock.show(options);
+        });
+
+    </script>
 </body>
+
 </html>
